@@ -1,0 +1,119 @@
+body {
+  margin: 0;
+  font-family: "Arial Black", Gadget, sans-serif;
+  background-color: #99a249;
+  /*background: url(../img/holo2.jpg) no-repeat center center fixed; 
+  -webkit-background-size: center-fill;
+  -moz-background-size: center-fill;
+  -o-background-size: center-fill;
+  background-size: center-fill;
+  */
+}
+.container, .center-fill {
+  width: 100vw;
+  height: 100vh;
+}
+#c, #c2, .canvas-bg {
+  display: block;
+  width: 50vw;
+  height: 50vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  /*-webkit-filter: blur(1px);*/
+  /*box-shadow: 0px 0px 3px 3px #000;*/
+  z-index: 8
+}
+#c2{
+  z-index: -1;
+}
+#b {
+position: absolute;
+top: 10px;
+width: 100%;
+text-align: center;
+z-index: 6;
+}
+
+.hidden {
+    transition: visibility 2s, opacity 2s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.shown {
+    transition: visibility 2s, opacity 2s;
+    visibility: visible;
+    opacity: 1;
+}
+
+.glow-text:hover {
+    animation: glow 3s infinite alternate;
+    transition-duration: 1.5s all;
+}
+
+.glow-text {
+    transition-duration: 1.5s all;
+    text-shadow: 2px 2px 1px rgba(0,0,0,.5);
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px #ffff88, 2px 2px 1px rgba(0,0,0,.5);
+    }
+
+    50% {
+        text-shadow: 0 0 25px #ffff88, 2px 2px 1px rgba(0,0,0,.5);
+    }
+
+    100% {
+        text-shadow: 0 0 10px #ffff88, 2px 2px 1px rgba(0,0,0,.5);
+    }
+}
+
+.text {
+  z-index: 100;
+}
+
+.yaeji {
+  position: absolute;
+  z-index: 100;
+  right: 40%;
+  top: 10px;
+  transform: translateX(50%);
+}
+
+.one-more {
+  position: absolute;
+  z-index: 100;
+  left: 20%;
+  bottom: 20%;
+}
+
+.listen {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  right: 25%;
+}
+
+.listen p {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(-50%; -50%);
+}
+
+
+#lineCanvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+}
