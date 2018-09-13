@@ -25,7 +25,6 @@ var programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
 var textures = twgl.createTextures(gl, {
 	onemore: { src: "static/media/img/onemore.jpg" },
   yellow: { src: "static/media/img/onemore-yellow.jpg" },
-  fg: { src: "static/media/img/onemore-fg.jpg" },
   water: { src: "static/media/img/wiggle.png" },
   clouds: { src: "static/media/img/noise.jpg" },
 }, function(){
@@ -44,7 +43,7 @@ var uniforms = {
 
     u_waterMap: textures.water,
     u_textureBg: textures.onemore,
-    u_textureShine: textures.fg,
+    u_textureShine: textures.onemore,
     u_textureFg: textures.yellow,
 
     phase_tex: textures.clouds,
