@@ -6,9 +6,9 @@ noise.seed(Math.random());
 var bezierBaseVals = [
 	.6, .08,
 	.5, .15,
-	.8, .63,
+	.85, .63,
 	.35, .6,
-	.2, .8,
+	.1, .8,
 ];
 
 var bezierVals = [

@@ -87,7 +87,7 @@ z-index: 6;
 .one-more {
   position: absolute;
   z-index: 100;
-  left: 20%;
+  left: 10%;
   bottom: 20%;
 }
 
@@ -95,14 +95,22 @@ z-index: 6;
   position: absolute;
   z-index: 100;
   top: 50%;
-  right: 25%;
+  right: 15%;
 }
 
 .listen p {
   position: absolute;
   top: 50%;
   right: 50%;
-  transform: translate(-50%; -50%);
+}
+
+.korean-onemore {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 27%;
+  height: auto;
+  z-index: 3000;
 }
 
 

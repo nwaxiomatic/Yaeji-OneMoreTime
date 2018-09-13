@@ -4,17 +4,32 @@ function resizeVideo(){
     var h = $(document).height();
     var w = $(document).width();
     var centerBox = $('.center-box');
-    var size = '70';
+    var koreanOnemore = $('.korean-onemore');
+    var sizeNum = 90;
+        var size = sizeNum.toString();
+        var ratio = h/w;
     if(h > w){
         centerBox.css({
             'width' : size + 'vw',
             'height' : size + 'vw',
+        })
+        koreanOnemore.css({
+            'left' : '12vw',
+            'top' : (50 - 15 + size/ratio/2).toString() + 'vh',
+            'width': '27%',
+            'height': 'auto',
         })
     }
     else {
         centerBox.css({
             'width' : size + 'vh',
             'height' : size + 'vh',
+        })
+        koreanOnemore.css({
+            'top' : '79vh',
+            'left' : (50 - ratio*size/2 + 3).toString() + 'vw',
+            'width': 'auto',
+            'height': '10%',
         })
     }
 }
