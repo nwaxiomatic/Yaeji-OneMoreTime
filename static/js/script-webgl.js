@@ -28,7 +28,7 @@ function resizeVideo(){
         })
         canvas.css({
             'top' : amountT + 'px',
-            'left' : '80vw',
+            'left' : '78vw',
         })
         centerImgT.css({
             'width' : centerSize + 'vw',
