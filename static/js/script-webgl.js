@@ -1,50 +1,106 @@
 "use strict";
 
 function resizeVideo(){
-    var h = $(document).height();
-    var w = $(document).width();
-    var centerBox = $('.center-box');
+    var h = window.innerHeight;
+    var w = window.innerWidth;
+    var canvas = $('#c');
+    var centerImg = $('.center-image');
     var koreanOnemore = $('.korean-onemore');
-    var sizeNum = 90;
+    var centerSizeNum = 70;
+    var centerSize = centerSizeNum.toString();
+    var centerSizeHalf = (centerSizeNum/2).toString();
+    var sizeNum = 45;
         var size = sizeNum.toString();
         var ratio = h/w;
+
+
     if(h > w){
-        centerBox.css({
+      var squareDim = centerSizeNum / 100 * w;
+        var centerH = h / 2;
+        var amountT = ( (h - squareDim) / 2 + .03*w).toString();
+        var amountB = ( (h + squareDim) / 2 -.04*w).toString();
+        canvas.css({
             'width' : size + 'vw',
-            'height' : size + 'vw',
+            'height' : (sizeNum * 5/9).toString() + 'vw',
+        })
+        canvas.css({
+            'top' : amountT + 'px',
+            'left' : '80vw',
+        })
+        centerImg.css({
+            'width' : centerSize + 'vw',
+            'height' : centerSizeHalf + 'vw',
         })
         koreanOnemore.css({
             'left' : '12vw',
-            'top' : (50 - 15 + size/ratio/2).toString() + 'vh',
-            'width': '27%',
+            'top' : amountB + 'px',
+            'width': '27vw',
             'height': 'auto',
         })
     }
     else {
-        centerBox.css({
+        var squareDim = centerSizeNum / 100 * h;
+        var centerW = w / 2;
+        var amountL = ( (w - squareDim) / 2 - .1*h).toString();
+        var amountR = ( (w + squareDim) / 2 -.05*h).toString();
+        canvas.css({
+            'top' : '18vh',
+            'left' : amountR + 'px',
             'width' : size + 'vh',
-            'height' : size + 'vh',
+            'height' : (sizeNum * 5/9).toString() + 'vh',
+        })
+        centerImg.css({
+            'width' : centerSize + 'vh',
+            'height' : centerSizeHalf + 'vh',
         })
         koreanOnemore.css({
             'top' : '79vh',
-            'left' : (50 - ratio*size/2 + 3).toString() + 'vw',
+            'left' : amountL + 'px',
             'width': 'auto',
-            'height': '10%',
+            'height': '10vh',
         })
     }
+
+    var canvas = $('#c');
+  uniforms['u_resolution'] = [canvas.width(), canvas.height()];
+  uniforms['u_textureRatio'] = canvas.width() / canvas.height();
+  uniforms['u_corner'] = [canvas.offset().top / $(window).height(), canvas.offset().left / $(window).width()]
 }
 
 var gl = twgl.getWebGLContext(document.getElementById("c"));
 var programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
 
+var imgCount = 0;
+var imgWait = 2;
+
+function showPage(){
+  if(imgCount==imgWait){
+    $(window).resize();
+      $('.container').addClass('shown');
+      requestAnimationFrame(render);
+  }
+}
+
+
 var textures = twgl.createTextures(gl, {
-	onemore: { src: "static/media/img/onemore.jpg" },
-  yellow: { src: "static/media/img/onemore-yellow.jpg" },
-  water: { src: "static/media/img/wiggle.png" },
+  yellow: { src: "static/media/img/slimebg.jpg" },
+  water: { src: "static/media/img/slime2.png" },
   clouds: { src: "static/media/img/noise.jpg" },
 }, function(){
-    $('.container').addClass('shown');
-      requestAnimationFrame(render);
+    var imgT = new Image();
+    var imgB = new Image();
+    imgT.onload = function() { 
+      imgCount ++;
+      $('.center-image-top').attr('src', imgT.src);
+      showPage();
+    }
+    imgB.onload = function() { 
+      imgCount ++;
+      $('.center-image-bottom').attr('src', imgB.src);
+      showPage();
+    }
+    imgT.src = "static/media/img/yaeji-cover-small-top.jpg"; 
+    imgB.src = "static/media/img/yaeji-cover-small-bottom.jpg";      
   });
 
 var arrays = {
@@ -57,14 +113,13 @@ var uniforms = {
     resolution: [gl.canvas.width, gl.canvas.height],
 
     u_waterMap: textures.water,
-    u_textureBg: textures.onemore,
-    u_textureShine: textures.onemore,
+    u_textureBg: textures.yellow,
     u_textureFg: textures.yellow,
 
     phase_tex: textures.clouds,
     tex: textures.water,
 
-    u_minRefraction: .12,
+    u_minRefraction: .05,
     u_brightness: 1,
     u_alphaMultiply: 1,
     u_alphaSubtract: 0,
@@ -73,8 +128,8 @@ var uniforms = {
     u_renderShine: true,
     u_renderShadow: false, 
 
-    u_resolution: [620, 620],
-    u_textureRatio: 1,
+    u_resolution: [900, 500],
+    u_textureRatio: .4,
 
     u_mouse: [.5,.5],
     u_corner: [.2, .2],
@@ -97,7 +152,6 @@ $( window ).mousemove(function(event) {
 });
 
 // $(window).resize(resizeVideo);
-$(window).resize();
 
 function render(time) {
   twgl.resizeCanvasToDisplaySize(gl.canvas);
@@ -106,11 +160,6 @@ function render(time) {
   var shadowAmt = 10 * (1 + Math.sin(time / 1000.0) ) / 2.0 + 4.0;
 
   uniforms['time'] += 0.03;
-
-  var canvas = $('#c');
-  uniforms['u_resolution'] = [canvas.height(), canvas.width()];
-  uniforms['u_textureRatio'] = canvas.height() / canvas.width();
-  uniforms['u_corner'] = [canvas.offset().top / $(window).height(), canvas.offset().left / $(window).width()]
 
 
   gl.useProgram(programInfo.program);

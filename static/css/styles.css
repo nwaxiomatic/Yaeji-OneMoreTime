@@ -13,18 +13,37 @@ body {
   width: 100vw;
   height: 100vh;
 }
-#c, #c2, .canvas-bg {
+#c, #c2{
   display: block;
-  width: 50vw;
+  width: 90vw;
   height: 50vw;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 18%;
+  left: 70%;
   transform: translateX(-50%) translateY(-50%);
   /*-webkit-filter: blur(1px);*/
   /*box-shadow: 0px 0px 3px 3px #000;*/
+  z-index: 1000
+}
+
+.center-image {
+  display: block;
+  width: 70vw;
+  height: 70vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.center-image-top {
+  transform: translateX(-50%) translateY(-100%);
+  z-index: 11
+}
+.center-image-bottom {
+  transform: translateX(-50%) translateY(0%);
   z-index: 8
 }
+
 #c2{
   z-index: -1;
 }
@@ -48,14 +67,9 @@ z-index: 6;
     opacity: 1;
 }
 
-.glow-text:hover {
+.glow-text {
     animation: glow 3s infinite alternate;
     transition-duration: 1.5s all;
-}
-
-.glow-text {
-    transition-duration: 1.5s all;
-    text-shadow: 2px 2px 1px rgba(0,0,0,.5);
 }
 
 @keyframes glow {

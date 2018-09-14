@@ -28,9 +28,9 @@
 
   		<div class="text listen glow-text">  <p> LISTEN </p> </div>
   		
-  	<canvas id="c2" class="center-fill"></canvas>
-  	<div class="canvas-bg breathe center-box"></div>
-    	<canvas id="c" class="center-box"></canvas>
+  	<canvas id="c" class="center-box"></canvas>
+  	<img class="center-image center-image-top" src="">
+  	<img class="center-image center-image-bottom" src="">
 
     <canvas id="lineCanvas">
 Your browser does not support the HTML5 canvas tag.</canvas>
@@ -63,7 +63,6 @@ uniform vec2 u_corner;
 
 uniform sampler2D u_waterMap;
 uniform sampler2D u_textureBg;
-uniform sampler2D u_textureShine;
 uniform sampler2D u_textureFg;
 
 uniform sampler2D phase_tex;
@@ -195,21 +194,24 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
   vec2 refractionPos = loc
     + (refraction*(u_minRefraction+(d*u_refractionDelta)));
 
-  vec4 tex=texture2D(u_textureFg,refractionPos);
+  vec4 texFg = texture2D(u_textureFg,refractionPos);
   
 
   if(u_renderShine){
    vec2 direction = vec2(1.0,1.0) - loc - u_mouse;
    vec2 normal = vec2(y-.5, x-.5);
     float dot = dot(direction, normal) * cur.a / (length(direction) * length(normal) + .01);
-    dot *= abs(dot);
+    dot *= abs(dot) * abs(dot) * abs(dot);
     dot = max(0.0, dot);
-    vec4 shine = vec4(dot, dot, dot, dot) * .3 + tex;
-    tex=blend(tex,shine);
-    //tex=shine;
+    vec4 shine = vec4(dot, dot, dot, dot) * .35 + texFg;
+   
+    //tex=blend(tex,shine);
+    texFg=shine;
   }
 
-  vec4 fg=vec4(tex.rgb*u_brightness,a);
+  texFg *= cur.a;
+
+  vec4 fg=vec4(texFg.rgb*u_brightness,a);
 
   if(u_renderShadow){
     float borderAlpha = fgColor(0.,0.-(d*6.0), loc).a;
@@ -220,7 +222,8 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
     fg=blend(border,fg);
   }
 
-  gl_FragColor = blend(bg,fg);
+  //gl_FragColor = blend(bg,fg);
+  gl_FragColor = texFg;
 }
   </script>
 
