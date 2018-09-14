@@ -23,7 +23,7 @@ function getCurvePoints(pts, tension, isClosed, numOfSegments) {
     // use input value if provided, or use a default value   
     tension = (typeof tension != 'undefined') ? tension : 0.5;
     isClosed = isClosed ? isClosed : false;
-    numOfSegments = numOfSegments ? numOfSegments : 16;
+    numOfSegments = numOfSegments ? numOfSegments : 30;
 
     var _pts = [], res = [],    // clone array
         x, y,           // our x,y coords
