@@ -41,7 +41,7 @@ function resizeVideo(){
         koreanOnemore.css({
             'left' : '12vw',
             'top' : amountB + 'px',
-            'width': '27vw',
+            'width': '35vw',
             'height': 'auto',
         })
 
