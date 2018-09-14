@@ -38,18 +38,6 @@ body {
   z-index: 8
 }
 
-.hidden {
-    transition: visibility 2s, opacity 2s;
-    visibility: hidden;
-    opacity: 0;
-}
-
-.shown {
-    transition: visibility 2s, opacity 2s;
-    visibility: visible;
-    opacity: 1;
-}
-
 .glow-text {
     animation: glow 3s infinite alternate;
     transition-duration: 1.5s all;
