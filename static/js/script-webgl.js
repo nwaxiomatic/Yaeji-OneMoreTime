@@ -4,8 +4,11 @@ function resizeVideo(){
     var h = window.innerHeight;
     var w = window.innerWidth;
     var canvas = $('#c');
-    var centerImg = $('.center-image');
+    var centerImgT = $('.center-image-top');
+    var centerImgB = $('.center-image-bottom');
     var koreanOnemore = $('.korean-onemore');
+    var body = $('body');
+
     var centerSizeNum = 70;
     var centerSize = centerSizeNum.toString();
     var centerSizeHalf = (centerSizeNum/2).toString();
@@ -13,8 +16,8 @@ function resizeVideo(){
         var size = sizeNum.toString();
         var ratio = h/w;
 
-
     if(h > w){
+      bezierBaseVals[4] = .95;
       var squareDim = centerSizeNum / 100 * w;
         var centerH = h / 2;
         var amountT = ( (h - squareDim) / 2 + .03*w).toString();
@@ -27,9 +30,13 @@ function resizeVideo(){
             'top' : amountT + 'px',
             'left' : '80vw',
         })
-        centerImg.css({
+        centerImgT.css({
             'width' : centerSize + 'vw',
             'height' : centerSizeHalf + 'vw',
+        })
+        centerImgB.css({
+            'width' : centerSize + 'vw',
+            'height' : centerSize + 'vw',
         })
         koreanOnemore.css({
             'left' : '12vw',
@@ -37,8 +44,10 @@ function resizeVideo(){
             'width': '27vw',
             'height': 'auto',
         })
+
     }
     else {
+      bezierBaseVals[4] = .88;
         var squareDim = centerSizeNum / 100 * h;
         var centerW = w / 2;
         var amountL = ( (w - squareDim) / 2 - .1*h).toString();
@@ -49,9 +58,13 @@ function resizeVideo(){
             'width' : size + 'vh',
             'height' : (sizeNum * 5/9).toString() + 'vh',
         })
-        centerImg.css({
+        centerImgT.css({
             'width' : centerSize + 'vh',
             'height' : centerSizeHalf + 'vh',
+        })
+        centerImgB.css({
+            'width' : centerSize + 'vh',
+            'height' : centerSize + 'vh',
         })
         koreanOnemore.css({
             'top' : '79vh',
@@ -100,7 +113,7 @@ var textures = twgl.createTextures(gl, {
       showPage();
     }
     imgT.src = "static/media/img/yaeji-cover-small-top.jpg"; 
-    imgB.src = "static/media/img/yaeji-cover-small-bottom.jpg";      
+    imgB.src = "static/media/img/yaeji-cover-small.jpg";      
   });
 
 var arrays = {
