@@ -12,12 +12,17 @@ function resizeVideo(){
     var canvas = $('#c');
     var centerImgT = $('.center-image-top');
     var centerImgB = $('.center-image-bottom');
+    var centerImg = $('.center-image-mobile');
     var koreanOnemore = $('.korean-onemore');
     var body = $('body');
 
     var mobileText = $('.mobile-listen');
 
     if(isMobile){
+      body.css({ 'height': h, 'width': w });
+      $('.container').css({ 'height': h, 'width': w });
+      centerImg.css({ 'height': h });
+
       var centerSizeNum = 100;
     var centerSize = centerSizeNum.toString();
     var centerSizeHalf = (centerSizeNum/2).toString();
@@ -34,11 +39,6 @@ function resizeVideo(){
             'top' : amountT + 'px',
             'left' : amountL + 'px',
         })
-        centerImgB.css({
-            'width' : centerSize + 'vh',
-            'height' : centerSize + 'vh',
-        })
-
         mobileText.css({
             'width': '50vw',
             'height': '25vw',
@@ -55,10 +55,6 @@ function resizeVideo(){
             'left' : amountL + 'px',
                 'height' : size + 'vh',
                 'width' : (sizeNum * 9/5).toString() + 'vh',
-            })
-            centerImgB.css({
-                'width' : centerSize + 'vw',
-                'height' : centerSize + 'vw',
             })
             mobileText.css({
             'width': '30vw',
@@ -178,7 +174,11 @@ function setUpMobile(){
     var imgB = new Image();
     imgB.onload = function() { 
       imgCount ++;
-      $('.center-image-bottom').attr('src', imgB.src);
+      $('.center-image-mobile').css({
+        'background-image': 'url(' + imgB.src + ')',
+        'background-position': 'center',
+        'background-size':'cover',
+      })
       showPage();
     }
     imgB.src = "static/media/img/yaeji-cover-small.jpg";    

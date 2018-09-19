@@ -7,11 +7,14 @@ body {
   width: 100vw;
   height: 100vh;
   font-weight: 800;
+  position: relative;
+  overflow-x: hidden;
 }
 
 .container, .center-fill {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 #c{
   display: block;
@@ -39,7 +42,12 @@ body {
 }
 .center-image-bottom {
   transform: translateX(-50%) translateY(-50%);
-  z-index: 8
+  z-index: 8;
+}
+
+.center-image-mobile {
+  width: 100vw;
+  height: 100vh;
 }
 
 .glow-text {
