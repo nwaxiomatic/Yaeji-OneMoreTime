@@ -19,10 +19,6 @@ function resizeVideo(){
     var mobileText = $('.mobile-listen');
 
     if(isMobile){
-      body.css({ 'height': h, 'width': w });
-      $('.container').css({ 'height': h, 'width': w });
-      centerImg.css({ 'height': h });
-
       var centerSizeNum = 100;
     var centerSize = centerSizeNum.toString();
     var centerSizeHalf = (centerSizeNum/2).toString();
@@ -133,7 +129,11 @@ function resizeVideo(){
     var canvas = $('#c');
   uniforms['u_resolution'] = [canvas.width(), canvas.height()];
   uniforms['u_textureRatio'] = canvas.width() / canvas.height();
-  uniforms['u_corner'] = [canvas.offset().top / $(window).height(), canvas.offset().left / $(window).width()]
+  uniforms['u_corner'] = [canvas.offset().top / h, canvas.offset().left / w]
+          
+          body.css({ 'height': h, 'width': w });
+      $('.container').css({ 'height': h, 'width': w });
+      centerImg.css({ 'height': h });
 }
 
 var gl = twgl.getWebGLContext(document.getElementById("c"));
