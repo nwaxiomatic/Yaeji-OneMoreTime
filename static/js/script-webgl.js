@@ -44,6 +44,7 @@ function resizeVideo(){
             'height': '25vw',
             'bottom': '2em',
             'left': '2em',
+            'font-size': '1.2em',
         })
       }
         else {
@@ -64,6 +65,7 @@ function resizeVideo(){
             'height': '15vw',
             'bottom': '1em',
             'left': '1em',
+            'font-size': '.8em',
         })
         }
       }
