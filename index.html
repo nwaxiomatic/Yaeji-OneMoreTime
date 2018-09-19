@@ -33,19 +33,27 @@
   <body>
   	<div class="container hidden">
 
-  		<img class="korean-onemore" src="static/media/img/KOREAN_ONEMORE.png">
+  		<img class="korean-onemore desktop" src="static/media/img/KOREAN_ONEMORE.png">
 
-  		<div class="text yaeji"> <p> YAEJI </p> </div>
+  		<div class="text yaeji desktop"> <p> YAEJI </p> </div>
 
-  		<div class="text one-more"> <p> ONE MORE </p> </div>
+  		<div class="text one-more desktop"> <p> ONE MORE </p> </div>
 
-  		<div class="text listen glow-text">  <p> LISTEN </p> </div>
+  		<div class="text listen glow-text desktop">  <p> LISTEN </p> </div>
   		
+  		<div class="mobile listen-bg mobile-listen"></div>
+  		<div class="mobile mobile-listen">
+  			<div class="text mobile-listen-text">
+  				"ONE MORE"<br>
+  				LISTEN
+  			</div>
+  		</div>
+
   	<canvas id="c" class="center-box"></canvas>
-  	<img class="center-image center-image-top" src="">
+  	<img class="center-image center-image-top desktop" src="">
   	<img class="center-image center-image-bottom" src="">
 
-    <canvas id="lineCanvas">
+    <canvas id="lineCanvas" class="desktop">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 </div>
@@ -75,6 +83,7 @@ uniform vec2 u_mouse;
 uniform vec2 u_corner;
 
 uniform sampler2D u_waterMap;
+uniform sampler2D u_waterRMap;
 uniform sampler2D u_textureBg;
 uniform sampler2D u_textureFg;
 
@@ -89,6 +98,8 @@ uniform float u_refractionDelta;
 
 uniform bool u_renderShine;
 uniform bool u_renderShadow;
+uniform bool u_isMobile;
+uniform float u_pixelRatio;
 
 uniform float time  ;  
 
@@ -137,7 +148,7 @@ vec2 scaledTexCoord(){
 }
 
 // get color from fg
-vec4 fgColor(float x, float y, vec2 loc){
+vec4 fgColor(float x, float y, vec2 loc, bool refl){
   float p2=2.0;
   vec2 scale=vec2(
     1.0,
@@ -150,9 +161,16 @@ vec4 fgColor(float x, float y, vec2 loc){
     (1.0-(1.0/scale.y))/2.0
   );
 
-  return texture2D(u_waterMap,
-    (scaledTexCoord+offset)+(loc * vec2(x,y))
-  );
+  if(!refl){
+	  return texture2D(u_waterMap,
+	    (scaledTexCoord+offset)+(loc * vec2(x,y))
+	  );
+	}
+
+	return texture2D(u_waterRMap,
+    	(scaledTexCoord+offset)+(loc * vec2(x,y))
+  	);
+
 }
 
 
@@ -162,9 +180,9 @@ void main() {
 
 	vec2 loc = scaledTexCoord();
 
-vec4 cur = fgColor(0.0,0.0, loc);
+vec4 cur = fgColor(0.0,0.0, loc, false);
 
-float scale = 0.01;
+float scale = 0.012;
 float pixels = 1.0;
 vec2 resolution_n = vec2(u_resolution.x, u_resolution.y);
 vec2 distance = vec2(pixels, pixels) / resolution_n;
@@ -196,7 +214,6 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
 
   vec4 bg=texture2D(u_textureBg,loc);
 
-
   float d=cur.b; // "thickness"
   float x=cur.r;
   float y=cur.g;
@@ -208,18 +225,22 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
     + (refraction*(u_minRefraction+(d*u_refractionDelta)));
 
   vec4 texFg = texture2D(u_textureFg,refractionPos);
-  
-
+  vec2 new_mouse = u_mouse;
+ 
   if(u_renderShine){
-   vec2 direction = vec2(1.0,1.0) - loc - u_mouse;
+  float shineMult = .35;
+  if(u_isMobile){
+	    new_mouse = vec2(sin(time/1.0), cos(time/1.0));
+	    shineMult = 1.2;
+	}
+   vec2 direction = vec2(1.0,1.0) - loc - new_mouse;
    vec2 normal = vec2(y-.5, x-.5);
     float dot = dot(direction, normal) * cur.a / (length(direction) * length(normal) + .01);
     dot *= abs(dot) * abs(dot) * abs(dot);
     dot = max(0.0, dot);
     vec4 shine = vec4(dot, dot, dot, dot) * .35 + texFg;
    
-    //tex=blend(tex,shine);
-    texFg=shine;
+   texFg=shine;
   }
 
   texFg *= cur.a;
@@ -227,7 +248,7 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
   vec4 fg=vec4(texFg.rgb*u_brightness,a);
 
   if(u_renderShadow){
-    float borderAlpha = fgColor(0.,0.-(d*6.0), loc).a;
+    float borderAlpha = fgColor(0.,0.-(d*6.0), loc, true).a;
     borderAlpha=borderAlpha*u_alphaMultiply-(u_alphaSubtract+0.5);
     borderAlpha=clamp(borderAlpha,0.,1.);
     borderAlpha*=0.2;
@@ -235,8 +256,8 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
     fg=blend(border,fg);
   }
 
-  //gl_FragColor = blend(bg,fg);
   gl_FragColor = texFg;
+ 
 }
   </script>
 
