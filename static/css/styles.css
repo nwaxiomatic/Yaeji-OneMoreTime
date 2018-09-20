@@ -11,31 +11,58 @@ body {
   overflow-x: hidden;
 }
 
+
+.mobile-listen {
+  z-index: 1000;
+  position: absolute;
+  bottom: 2em;
+  left: 2em;
+  width: 40vw;
+  height: 20vw;
+}
+
+.listen-bg {
+  z-index: 100;
+  background: #ddd;
+  mix-blend-mode: luminosity;
+  border-radius: 50%;
+}
+
+.mobile-listen-text {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+}
+
 .loading {
-  height: 10vh;
-  width: 10vh;
+  height: 30px;
+  width: 60px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   animation-name: rotator;
-  animation-duration: 2s;
+  animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   transform-origin: 0% 0%;
 }
 
-.loading-boi{
-      width: 100%;
-      height: 50%;
-      border-radius: 80% 70%;
-}
-.loading-1 {
-  border-right: 1px solid black;
+.loader{
+  width: 100%;
+  height: 100%;
+    stroke-dasharray: 25;
+    animation-name: dashboi;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
-.loading-2 {
-  border-left: 1px solid black;
+.loader path {
+  top: 50%;
 }
 
 @keyframes rotator {
@@ -47,6 +74,14 @@ body {
   }
   100% {
     transform: rotate(360deg) translate(-50%, -50%);
+  }
+}
+@keyframes dashboi {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
   }
 }
 
@@ -163,32 +198,6 @@ body {
   height: 100%;
   z-index: 10;
 }
-
-.mobile-listen {
-  z-index: 1000;
-  position: absolute;
-  bottom: 2em;
-  left: 2em;
-  width: 40vw;
-  height: 20vw;
-}
-
-.listen-bg {
-  z-index: 100;
-  background: #ddd;
-  mix-blend-mode: luminosity;
-  border-radius: 50%;
-}
-
-.mobile-listen-text {
-  text-align: center;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5em;
-}
-
 
 @media only screen and (max-width: 600px) {
   body {

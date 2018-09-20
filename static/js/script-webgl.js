@@ -148,6 +148,9 @@ function showPage(){
       $('.loading').addClass('hidden');
       setTimeout(function(){
         $('.container').addClass('shown');
+        setTimeout(function(){
+          $('.loading').remove();
+        },900);
         requestAnimationFrame(render);
       }, 1000);
   }
