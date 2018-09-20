@@ -145,8 +145,11 @@ var imgWait = isMobile ? 1 : 2;
 function showPage(){
   if(imgCount==imgWait){
     $(window).resize();
-      $('.container').addClass('shown');
-      requestAnimationFrame(render);
+      $('.loading').addClass('hidden');
+      setTimeout(function(){
+        $('.container').addClass('shown');
+        requestAnimationFrame(render);
+      }, 1000);
   }
 }
 
@@ -242,6 +245,10 @@ $( window ).resize(function() {
 
   lineCanvas.width  = window.innerWidth*window.devicePixelRatio;
   lineCanvas.height = window.innerHeight*window.devicePixelRatio;
+});
+
+window.addEventListener('orientationchange', function(){
+  setTimeout(resizeVideo, 150);
 });
 
 $( window ).mousemove(function(event) {
