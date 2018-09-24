@@ -1,3 +1,7 @@
+.listen-link, .yaeji {
+  cursor: crosshair;
+}
+
 body {
   margin: 0;
   font-family: Helvetica, "Arial Black", sans-serif;
@@ -10,7 +14,6 @@ body {
   position: relative;
   overflow-x: hidden;
 }
-
 
 .mobile-listen {
   z-index: 1000;
