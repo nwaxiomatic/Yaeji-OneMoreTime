@@ -203,10 +203,10 @@ var textures = twgl.createTextures(gl, {
   clouds: { src: "static/media/img/noise.jpg" },
 }, function(){
   if(isMobile){
-    setUpMobile();
+    //setUpMobile();
   }
   else {
-    setUpDesktop();
+    //setUpDesktop();
   }
 }
 );
