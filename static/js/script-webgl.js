@@ -1,7 +1,7 @@
 "use strict";
 
 $('.yaeji').click(function(){
-  window.location.replace(redirectURL);
+  window.location.replace(redirectURL + '/tour');
 });
 
 $('.listen-link').click(function(){
