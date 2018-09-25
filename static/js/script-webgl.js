@@ -1,11 +1,11 @@
 "use strict";
 
 $('.yaeji').click(function(){
-  window.location.replace(redirectURL + '/tour');
+  window.location.href = redirectURL + '/tour';
 });
 
 $('.listen-link').click(function(){
-  window.location.replace('http://smarturl.it/yaeji-onemore');
+  window.location.href = 'http://smarturl.it/yaeji-onemore';
 });
 
 var isMobile = false; //initiate as false
