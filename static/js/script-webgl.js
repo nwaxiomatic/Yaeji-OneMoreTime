@@ -25,6 +25,19 @@ function resizeVideo(){
 
     var mobileText = $('.mobile-listen');
 
+    if(h > 1220 / 2880 / .8 * w){
+      $('.video-cover img').css({
+        'width': 'auto',
+        'height': (window.screen.availHeight * .8).toString() + 'px',
+      });
+    }
+    else{
+      $('.video-cover img').css({
+        'width': '100vw',
+        'height': 'auto',
+      });
+    }
+
     if(isMobile){
       var centerSizeNum = 100;
     var centerSize = centerSizeNum.toString();
@@ -168,29 +181,31 @@ function showPage(){
     setTimeout(function(){
       $('.loader').remove();
       $('.buttons').toggleClass('shown');
+      $('body').removeClass('no-scroll');
     }, 2000);
 
     setTimeout(function(){
       window.scrollTo(0, 0);
     }, 0);
 
+    $('body').addClass('black-bg');
+
     var playButton = $("#c-play").click(function() {
-    player.playVideo();
-    $('.video-cover').css({'z-index':-100});
-    $('.video-cover').toggleClass('shown');
-    $('#video').toggleClass('shown');
-    $('.buttons').toggleClass('shown');
+      player.playVideo();
+      $('.video-cover').css({'z-index':-100});
+      $('.video-cover').toggleClass('shown');
+      $('#video').toggleClass('shown');
+      $('.buttons').toggleClass('shown');
     });
 
     $(window).resize();
       $('.loading').addClass('hidden');
       setTimeout(function(){
         $('.container').addClass('shown');
-        $('body').removeClass('no-scroll');
         setTimeout(function(){
           $('.loading').remove();
         },900);
-        requestAnimationFrame(render);
+          requestAnimationFrame(render);
       }, 1000);
   }
 }
@@ -217,7 +232,7 @@ function setUpDesktop(){
     }
     imgT.src = "static/media/img/yaeji-cover-small-top.jpg"; 
     imgB.src = "static/media/img/yaeji-cover-small.jpg";    
-    imgV.src = "static/media/img/cover.png"  
+    imgV.src = "static/media/img/cover cropped.jpg"  
 }
 
 function setUpMobile(){
@@ -240,7 +255,7 @@ function setUpMobile(){
       showPage();
     }
     imgB.src = "static/media/img/yaeji-cover-small.jpg";   
-    imgV.src = "static/media/img/cover.png"   
+    imgV.src = "static/media/img/cover cropped.jpg"   
 }
 
 $(document).ready(function(){
@@ -366,7 +381,7 @@ var uniforms2 = {
     u_corner: [.2, .2],
     u_pixelRatio:window.devicePixelRatio,
     u_wigglescale:0.03,
-    u_shineVal:.6,
+    u_shineVal:.8,
 
   };
 
