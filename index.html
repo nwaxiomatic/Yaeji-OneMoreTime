@@ -7,7 +7,7 @@
 
 		<meta charset="utf-8">
 		
-		<meta property="og:image" content="https://nwaxiomatic.github.io/Yaeji-OneMoreTime/static/media/img/preview.jpg" />
+		<meta property="og:image" content="https://nwaxiomatic.github.io/Yaeji-OneMoreTime/static/media/img/previewnew.jpg" />
 		<meta property="og:title" content="Yaeji - One More">
 
 		<style type="text/css" media="screen">
@@ -24,6 +24,8 @@
 		</style>
 
 		<link rel="stylesheet" type="text/css" href="static/css/styles.css" >
+    <link rel="stylesheet" type="text/css" href="static/css/style-video.css" >
+
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
 		<link rel="shortcut icon" href="static/media/img/fav.ico" type="image/x-icon">
 		<link rel="icon" href="static/media/img/fav.ico" type="image/x-icon">
@@ -31,7 +33,7 @@
 	</head>
 
 
-  <body id="body">
+  <body id="body" class="no-scroll">
 
   	<div class="loading">
 	  	<svg class="loader">
@@ -39,11 +41,22 @@
 </svg>
 	</div>
 
-  	<div class="container hidden">
+    <div class="container hidden">
+      <div class="music-video full-height">
+        <div class="video-cover hidden shown">
+          <canvas id="c-play" class="button buttons hidden" id="play-button"></canvas>
+          <img id="cover-img" src="">
+        </div>
+        <iframe class="hidden" id="video" src="//www.youtube.com/embed/dyPOhGIc1RI?enablejsapi=1&html5=1&hd=1&rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+  	<div class=" og-listen-site container hidden">
 
   		<img class="korean-onemore desktop" src="static/media/img/KOREAN_ONEMORE.png">
 
   		<div class="text yaeji desktop"> <p> YAEJI </p> </div>
+      <!-- <div class="text tour mobile"> <p>  </p> </div> -->
 
   		<div class="text one-more desktop"> <p> ONE MORE </p> </div>
 
@@ -110,6 +123,8 @@ uniform bool u_renderShine;
 uniform bool u_renderShadow;
 uniform bool u_isMobile;
 uniform float u_pixelRatio;
+uniform float u_wigglescale;
+uniform float u_shineVal;
 
 uniform float time  ;  
 
@@ -215,7 +230,7 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
   float dd = sqrt(dx*dx + dy*dy + .001);
 
   // optical flow
-  vec2 flow = scale * (1.0 + sin(dt*2.0*3.1416 + time)) / 2.0 * vec2(dx, dy) / dd;  
+  vec2 flow = u_wigglescale * (1.0 + sin(dt*2.0*3.1416 + time)) / 2.0 * vec2(dx, dy) / dd;  
  
  
   cur = texture2D(tex , loc + flow);
@@ -248,7 +263,7 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
     float dot = dot(direction, normal) * cur.a / (length(direction) * length(normal) + .01);
     dot *= abs(dot) * abs(dot) * abs(dot);
     dot = max(0.0, dot);
-    vec4 shine = vec4(dot, dot, dot, dot) * .35 + texFg;
+    vec4 shine = vec4(dot, dot, dot, dot) * u_shineVal + texFg;
    
    texFg=shine;
   }
