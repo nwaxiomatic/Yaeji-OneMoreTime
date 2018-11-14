@@ -7,12 +7,16 @@ body {
   font-family: Helvetica, "Arial Black", sans-serif;
   background-color: #99a249;
   font-size: 16px;
-  overflow: hidden;
+  /*overflow: hidden;*/
   width: 100vw;
   height: 100vh;
   font-weight: 800;
-  position: relative;
+  /*position: relative;*/
   overflow-x: hidden;
+}
+
+.no-scroll {
+  overflow: hidden;
 }
 
 .mobile-listen {
@@ -43,7 +47,7 @@ body {
 .loading {
   height: 30px;
   width: 60px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -222,5 +226,15 @@ body {
     top: 50%;
     right: 3.5%;
   }
+}
+
+.og-listen-site {
+  position: absolute;
+  top: 100%;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 100000;
+  background-color: #99a249;
 }
 

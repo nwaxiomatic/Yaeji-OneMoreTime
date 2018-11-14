@@ -24,6 +24,8 @@
 		</style>
 
 		<link rel="stylesheet" type="text/css" href="static/css/styles.css" >
+    <link rel="stylesheet" type="text/css" href="static/css/style-video.css" >
+
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
 		<link rel="shortcut icon" href="static/media/img/fav.ico" type="image/x-icon">
 		<link rel="icon" href="static/media/img/fav.ico" type="image/x-icon">
@@ -31,7 +33,7 @@
 	</head>
 
 
-  <body id="body">
+  <body id="body" class="no-scroll">
 
   	<div class="loading">
 	  	<svg class="loader">
@@ -39,7 +41,23 @@
 </svg>
 	</div>
 
-  	<div class="container hidden">
+    <div class="container hidden">
+      <div class="music-video full-height">
+        <div class="video-cover hidden shown">
+          <div class="buttons hidden">
+            <svg class="button" id="play-button" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#99a249"></circle>
+              <polygon points="70, 55 70, 145 145, 100" fill="#99a249"></polygon>
+            </svg>
+            <!-- <canvas id="c" class="center-box"></canvas> -->
+          </div>
+          <img src="static/media/img/cover.png">
+        </div>
+        <iframe class="hidden" id="video" src="//www.youtube.com/embed/dyPOhGIc1RI?enablejsapi=1&html5=1&hd=1&rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+  	<div class=" og-listen-site container hidden">
 
   		<img class="korean-onemore desktop" src="static/media/img/KOREAN_ONEMORE.png">
 
