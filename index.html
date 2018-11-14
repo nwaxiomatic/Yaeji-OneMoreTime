@@ -44,14 +44,8 @@
     <div class="container hidden">
       <div class="music-video full-height">
         <div class="video-cover hidden shown">
-          <div class="buttons hidden">
-            <svg class="button" id="play-button" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#99a249"></circle>
-              <polygon points="70, 55 70, 145 145, 100" fill="#99a249"></polygon>
-            </svg>
-            <!-- <canvas id="c" class="center-box"></canvas> -->
-          </div>
-          <img src="static/media/img/cover.png">
+          <canvas id="c-play" class="button buttons hidden" id="play-button"></canvas>
+          <img id="cover-img" src="">
         </div>
         <iframe class="hidden" id="video" src="//www.youtube.com/embed/dyPOhGIc1RI?enablejsapi=1&html5=1&hd=1&rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>
       </div>
@@ -128,6 +122,8 @@ uniform bool u_renderShine;
 uniform bool u_renderShadow;
 uniform bool u_isMobile;
 uniform float u_pixelRatio;
+uniform float u_wigglescale;
+uniform float u_shineVal;
 
 uniform float time  ;  
 
@@ -233,7 +229,7 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
   float dd = sqrt(dx*dx + dy*dy + .001);
 
   // optical flow
-  vec2 flow = scale * (1.0 + sin(dt*2.0*3.1416 + time)) / 2.0 * vec2(dx, dy) / dd;  
+  vec2 flow = u_wigglescale * (1.0 + sin(dt*2.0*3.1416 + time)) / 2.0 * vec2(dx, dy) / dd;  
  
  
   cur = texture2D(tex , loc + flow);
@@ -266,7 +262,7 @@ vec2 distance = vec2(pixels, pixels) / resolution_n;
     float dot = dot(direction, normal) * cur.a / (length(direction) * length(normal) + .01);
     dot *= abs(dot) * abs(dot) * abs(dot);
     dot = max(0.0, dot);
-    vec4 shine = vec4(dot, dot, dot, dot) * .35 + texFg;
+    vec4 shine = vec4(dot, dot, dot, dot) * u_shineVal + texFg;
    
    texFg=shine;
   }

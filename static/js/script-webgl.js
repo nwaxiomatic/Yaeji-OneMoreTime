@@ -137,6 +137,11 @@ function resizeVideo(){
   uniforms['u_resolution'] = [canvas.width(), canvas.height()];
   uniforms['u_textureRatio'] = canvas.width() / canvas.height();
   uniforms['u_corner'] = [canvas.offset().top / h, canvas.offset().left / w]
+
+  var canvas2 = $('#c-play');
+  uniforms2['u_resolution'] = [canvas2.width(), canvas2.height()];
+  uniforms2['u_textureRatio'] = canvas2.width() / canvas2.height();
+  uniforms2['u_corner'] = [canvas2.offset().top / h, canvas2.offset().left / w]
           
           body.css({ 'height': h, 'width': w });
       $('.container').css({ 'height': h, 'width': w });
@@ -149,14 +154,17 @@ function resizeVideo(){
 var gl = twgl.getWebGLContext(document.getElementById("c"));
 var programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
 
-var imgCount = 0;
-var imgWait = isMobile ? 1 : 2;
+var gl2 = twgl.getWebGLContext(document.getElementById("c-play"));
+var programInfo2 = twgl.createProgramInfo(gl2, ["vs", "fs"]);
 
-var texturesLoaded = false;
+var imgCount = 0;
+var imgWait = isMobile ? 2 : 3;
+
+var texturesLoaded = 0;
 var videoLoaded = false;
 
 function showPage(){
-  if(imgCount==imgWait && videoLoaded && texturesLoaded){
+  if(imgCount==imgWait && videoLoaded && texturesLoaded==2){
     setTimeout(function(){
       $('.loader').remove();
       $('.buttons').toggleClass('shown');
@@ -166,7 +174,7 @@ function showPage(){
       window.scrollTo(0, 0);
     }, 0);
 
-    var playButton = $("#play-button").click(function() {
+    var playButton = $("#c-play").click(function() {
     player.playVideo();
     $('.video-cover').css({'z-index':-100});
     $('.video-cover').toggleClass('shown');
@@ -189,8 +197,9 @@ function showPage(){
 
 function setUpDesktop(){
   $('.mobile').remove();
-  var imgT = new Image();
+    var imgT = new Image();
     var imgB = new Image();
+    var imgV = new Image();
     imgT.onload = function() { 
       imgCount ++;
       $('.center-image-top').attr('src', imgT.src);
@@ -201,14 +210,21 @@ function setUpDesktop(){
       $('.center-image-bottom').attr('src', imgB.src);
       showPage();
     }
+    imgV.onload = function() { 
+      imgCount ++;
+      $('#cover-img').attr('src', imgV.src);
+      showPage();
+    }
     imgT.src = "static/media/img/yaeji-cover-small-top.jpg"; 
-    imgB.src = "static/media/img/yaeji-cover-small.jpg";      
+    imgB.src = "static/media/img/yaeji-cover-small.jpg";    
+    imgV.src = "static/media/img/cover.png"  
 }
 
 function setUpMobile(){
   $('.desktop').remove();
   $('#c').css({'mix-blend-mode': 'difference'})
     var imgB = new Image();
+    var imgV = new Image();
     imgB.onload = function() { 
       imgCount ++;
       $('.center-image-mobile').css({
@@ -218,8 +234,13 @@ function setUpMobile(){
       })
       showPage();
     }
-    imgB.src = "static/media/img/yaeji-cover-small.jpg";    
-  showPage();
+    imgV.onload = function() { 
+      imgCount ++;
+      $('#cover-img').attr('src', imgV.src);
+      showPage();
+    }
+    imgB.src = "static/media/img/yaeji-cover-small.jpg";   
+    imgV.src = "static/media/img/cover.png"   
 }
 
 $(document).ready(function(){
@@ -238,11 +259,21 @@ var textures = twgl.createTextures(gl, {
   waterR: { src: "static/media/img/slime2.png" },
   clouds: { src: "static/media/img/noise.jpg" },
 }, function(){
-  texturesLoaded = true;
-  showPage(event);
+  texturesLoaded += 1;
+  showPage();
 }
 );
 
+var textures2 = twgl.createTextures(gl2, {
+  yellow: { src: "static/media/img/slimebg.jpg" },
+  water: { src: "static/media/img/play.png" },
+  waterR: { src: "static/media/img/play2.png" },
+  clouds: { src: "static/media/img/noise.jpg" },
+}, function(){
+  texturesLoaded += 1;
+  showPage();
+}
+);
 
 var player;
 
@@ -271,6 +302,7 @@ var arrays = {
   position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
 };
 var bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+var bufferInfo2 = twgl.createBufferInfoFromArrays(gl2, arrays);
 
 var uniforms = {
     time: 0,
@@ -300,6 +332,41 @@ var uniforms = {
     u_mouse: [0,1],
     u_corner: [.2, .2],
     u_pixelRatio:window.devicePixelRatio,
+    u_wigglescale:0.012,
+    u_shineVal:0.35,
+
+  };
+
+var uniforms2 = {
+    time: 0,
+    resolution: [gl2.canvas.width, gl2.canvas.height],
+
+    u_waterMap: textures2.water,
+    u_waterRMap: textures2.water,
+    u_textureBg: textures2.yellow,
+    u_textureFg: textures2.yellow,
+
+    phase_tex: textures2.clouds,
+    tex: textures2.water,
+
+    u_minRefraction: .05,
+    u_brightness: 1,
+    u_alphaMultiply: 1,
+    u_alphaSubtract: 0,
+    u_refractionDelta: 1,
+
+    u_renderShine: true,
+    u_renderShadow: false, 
+    u_isMobile: isMobile,
+
+    u_resolution: [302, 302],
+    u_textureRatio: 1,
+
+    u_mouse: [0,1],
+    u_corner: [.2, .2],
+    u_pixelRatio:window.devicePixelRatio,
+    u_wigglescale:0.03,
+    u_shineVal:.6,
 
   };
 
@@ -316,9 +383,14 @@ window.addEventListener('orientationchange', function(){
 
 function setWebGLMouse(event){
   var canvas = $('#c');
+  var canvasPlay = $('#c-play');
   uniforms['u_mouse'] = [
     (event.pageY - window.innerHeight - canvas.position().top)/canvas.height(), 
     (event.pageX - canvas.position().left)/canvas.width()
+  ];
+  uniforms2['u_mouse'] = [
+    (event.pageY - canvasPlay.position().top)/canvasPlay.height(), 
+    (event.pageX - canvasPlay.position().left)/canvasPlay.width()
   ];
 }
 
@@ -329,11 +401,14 @@ $( window ).on("mousewheel DOMMouseScroll", setWebGLMouse);
 
 function render(time) {
   twgl.resizeCanvasToDisplaySize(gl.canvas);
+  twgl.resizeCanvasToDisplaySize(gl2.canvas);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl2.viewport(0, 0, gl2.canvas.width, gl2.canvas.height);
 
   var shadowAmt = 10 * (1 + Math.sin(time / 1000.0) ) / 2.0 + 4.0;
 
   uniforms['time'] += 0.03;
+  uniforms2['time'] += 0.03;
 
 
   gl.useProgram(programInfo.program);
@@ -341,10 +416,10 @@ function render(time) {
   twgl.setUniforms(programInfo, uniforms);
   twgl.drawBufferInfo(gl, bufferInfo);
 
-  // gl2.useProgram(programInfo2.program);
-  // twgl.setBuffersAndAttributes(gl2, programInfo2, bufferInfo2);
-  // twgl.setUniforms(programInfo2, uniforms2);
-  // twgl.drawBufferInfo(gl2, bufferInfo2);
+  gl2.useProgram(programInfo2.program);
+  twgl.setBuffersAndAttributes(gl2, programInfo2, bufferInfo2);
+  twgl.setUniforms(programInfo2, uniforms2);
+  twgl.drawBufferInfo(gl2, bufferInfo2);
 
   requestAnimationFrame(render);
 
